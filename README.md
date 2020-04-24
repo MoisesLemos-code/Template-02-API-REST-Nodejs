@@ -6,3 +6,4 @@
 --> Nodejs
 --> Express
 --> Base de dados em MongoDB
+--> Relacionamento 1:N e N:N
