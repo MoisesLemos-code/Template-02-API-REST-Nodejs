@@ -1,31 +1,15 @@
-const { Schema, model } = require('mongoose');
+const { Model, DataTypes } = require('sequelize');
 
-const ProdutoSchema = new Schema({
-    descricao: {
-        type: String,
-        required: true
-    },
-    tamanho: {
-        type: String,
-        required: true
-    },
-    estoque: {
-        type: Number,
-        required: true
-    },
-    valor: {
-        type: Number,
-        required: true
-    },
-    itensVenda: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'ItemVenda'
-        }
-    ]
-},
-    {
-        timestamps: true
-    });
+class Produto extends Model {
+  static init(sequelize) {
+    super.init({
+      nome: DataTypes.STRING,
+      estoque: DataTypes.DOUBLE,
+      valor: DataTypes.DOUBLE,
+    }, {
+      sequelize
+    })
+  }
+}
 
-module.exports = model('Produto', ProdutoSchema);
+module.exports = Produto;

@@ -1,28 +1,20 @@
-const Cliente = require('../models/Cliente');
-
+const Cliente = require('../models/Cliente')
 
 module.exports = {
+  async store(req, res) {
+    const { nome, endereco, email } = req.body;
+    const obj = await Cliente.create({ nome, endereco, email });
+
+    return res.json(obj);
+  },
   async index(req, res) {
-    const cliente = await Cliente.findOne({ _id: req.params.id });
-    return res.json(cliente);
+    const obj = await Cliente.findByPk(req.params.id);
+
+    return res.json(obj)
   },
   async list(req, res) {
-    const Clientes = await Cliente.find({});
-    return res.json(Clientes);
-  },
-  async store(req, res) {
-    //Inserir no banco de dados
-    const cliente = await Cliente.create(req.body);
+    const obj = await Cliente.findAll();
 
-    return res.json(cliente);
-  },
-  async destroy(req, res) {
-    await Cliente.deleteOne({ _id: req.params.id });
-    return res.json({ success: "ok" });
-  },
-  async update(req, res) {
-    const cliente = await Cliente.updateOne({ _id: req.params.id }, req.body);
-    return res.json(cliente);
-  },
-
-}
+    return res.json(obj)
+  }
+};

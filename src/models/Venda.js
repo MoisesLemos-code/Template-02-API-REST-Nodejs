@@ -1,37 +1,22 @@
-const { Schema, model } = require('mongoose');
+const { Model, DataTypes } = require('sequelize');
 
-const VendaSchema = new Schema({
-	numero: {
-		type: Number,
-		required: true
-	},
-	statusVenda: {
-		type: Boolean,
-		required: true,
-		default: false
-	},
-	totalBruto: {
-		type: Number,
-		required: true
-	},
-	totalFinal: {
-		type: Number,
-		required: true
-	},
-	produtos: [
-		{
-			type: Schema.Types.ObjectId,
-			ref: 'ItemVenda'
-		}
-	],
-	cliente_id: {
-		type: Schema.Types.ObjectId,
-		ref: 'Cliente',
-		required: false
-	}
-},
-	{
-		timestamps: true
-	});
+class Venda extends Model {
+  static init(sequelize) {
+    super.init({
+      status: DataTypes.STRING,
+      total_acrescimo: DataTypes.DOUBLE,
+      total_desconto: DataTypes.DOUBLE,
+      total_liquido: DataTypes.DOUBLE,
+    }, {
+      sequelize
+    })
+  }
+  static associate(models) {
+    this.belongsTo(models.Cliente, {
+      foreignKey: 'cliente_id',
+      as: 'cliente'
+    })
+  }
+}
 
-module.exports = model('Venda', VendaSchema);
+module.exports = Venda;
