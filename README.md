@@ -5,5 +5,5 @@
 
 --> Nodejs
 --> Express
---> Base de dados em MongoDB
+--> Base de dados em PostegreSQL
 --> Relacionamento 1:N e N:N
