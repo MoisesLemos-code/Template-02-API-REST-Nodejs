@@ -10,6 +10,13 @@ class Produto extends Model {
       sequelize
     })
   }
+  static associate(models) {
+    this.belongsToMany(models.Venda, {
+      through: models.Venda_item,
+      as: 'vendas',
+      foreignKey: 'produto_id',
+    })
+  }
 }
 
 module.exports = Produto;

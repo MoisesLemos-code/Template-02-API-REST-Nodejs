@@ -11,14 +11,16 @@ routes.post('/cliente/insert', ClienteController.store)
 routes.get('/cliente/list', ClienteController.list)
 routes.get('/cliente/index/:id', ClienteController.index)
 
-
 routes.post('/produto/insert', ProdutoController.store)
 routes.get('/produto/list', ProdutoController.list)
 routes.get('/produto/index/:id', ProdutoController.index)
 
 routes.post('/venda/insert/', VendaController.store)
+routes.post('/venda/insert/item/:id', VendaController.storeItems)
 routes.get('/venda/list', VendaController.list)
 routes.get('/venda/index/:id', VendaController.index)
+routes.put('/venda/update/:id', VendaController.update)
+routes.delete('/venda/delete/:id', VendaController.destroy)
 
 
 module.exports = routes;

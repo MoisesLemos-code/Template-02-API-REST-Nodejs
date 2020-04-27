@@ -15,7 +15,12 @@ class Venda extends Model {
     this.belongsTo(models.Cliente, {
       foreignKey: 'cliente_id',
       as: 'cliente'
-    })
+    }),
+      this.belongsToMany(models.Produto, {
+        through: models.Venda_item,
+        as: 'produtos',
+        foreignKey: 'venda_id'
+      })
   }
 }
 
