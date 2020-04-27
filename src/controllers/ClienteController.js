@@ -16,5 +16,20 @@ module.exports = {
     const obj = await Cliente.findAll();
 
     return res.json(obj)
-  }
+  },
+  async update(req, res) {
+    const obj = await Cliente.update(
+      req.body,
+      {
+        where: { id: req.params.id }
+      }
+    )
+    return res.status(200).json(obj)
+  },
+  async destroy(req, res) {
+    await Cliente.destroy({
+      where: { id: req.params.id }
+    });
+    return res.json({ success: "ok" });
+  },
 };

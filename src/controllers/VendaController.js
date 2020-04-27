@@ -85,12 +85,23 @@ module.exports = {
     return res.json(obj)
   },
   async update(req, res) {
+    try {
+      const { produtos, ...data } = req.body;
+      /*  const venda = await Venda.update(
+          data,
+          { where: { id: req.params.id } }
+        ); */
 
-    const obj = await Venda.update(
-      req.body,
-      { where: { id: req.params.id } }
-    );
-    return res.json(obj);
+      const venda = await Venda.findByPk(req.params.id);
+      venda.update(data)
+      if (produtos && produtos.length > 0) {
+        venda.addProdutos(produtos[0])
+      }
+      return res.status(200).json(venda);
+    } catch (err) {
+      console.log(err)
+      return res.status(500).json({ error: 'Falha ao atualizar venda!' })
+    }
   },
   async destroy(req, res) {
     await Venda.destroy({

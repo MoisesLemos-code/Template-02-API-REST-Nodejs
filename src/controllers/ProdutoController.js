@@ -16,5 +16,20 @@ module.exports = {
     const obj = await Produto.findAll();
 
     return res.json(obj)
-  }
+  },
+  async update(req, res) {
+    const obj = await Produto.update(
+      req.body,
+      {
+        where: { id: req.params.id }
+      }
+    )
+    return res.status(200).json(obj)
+  },
+  async destroy(req, res) {
+    await Produto.destroy({
+      where: { id: req.params.id }
+    });
+    return res.json({ success: "ok" });
+  },
 };
