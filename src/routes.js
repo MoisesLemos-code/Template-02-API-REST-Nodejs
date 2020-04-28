@@ -25,6 +25,7 @@ routes.get('/venda/list', VendaController.list)
 routes.get('/venda/index/:id', VendaController.index)
 routes.put('/venda/update/:id', VendaController.update)
 routes.delete('/venda/delete/:id', VendaController.destroy)
-
+routes.delete('/delete/venda/:id_venda/item/:id_item',
+  VendaController.destroyItemVenda)
 
 module.exports = routes;

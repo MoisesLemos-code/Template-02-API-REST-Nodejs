@@ -1,7 +1,7 @@
 const Venda = require('../models/Venda')
 const Cliente = require('../models/Cliente')
 const Produto = require('../models/Produto')
-let Venda_item = require('../models/Venda_item')
+const Venda_item = require('../models/Venda_item')
 
 module.exports = {
   async store(req, res) {
@@ -58,8 +58,6 @@ module.exports = {
           }
         })
       }
-    } else {
-      return res.status(400).json({ error: 'Lista de produtos vazia!' })
     }
     return res.json(produtos)
   },
@@ -87,15 +85,23 @@ module.exports = {
   async update(req, res) {
     try {
       const { produtos, ...data } = req.body;
-      /*  const venda = await Venda.update(
-          data,
-          { where: { id: req.params.id } }
-        ); */
 
       const venda = await Venda.findByPk(req.params.id);
       venda.update(data)
-      if (produtos && produtos.length > 0) {
-        venda.addProdutos(produtos[0])
+      for (let i = 0; i < produtos.length; i++) {
+        produto = await Produto.findByPk(produtos[i].produto_id)
+        if (!produto) {
+          return res.status(400).json({ error: 'Produto não encontrado!', id: produtos[i].produto_id })
+        }
+        venda.addProdutos(produto, {
+          through: {
+            desconto: produtos[i].desconto,
+            acrescimo: produtos[i].acrescimo,
+            quantidade: produtos[i].quantidade,
+            valor: produtos[i].valor,
+            total_item: produtos[i].total_item
+          }
+        })
       }
       return res.status(200).json(venda);
     } catch (err) {
@@ -109,4 +115,21 @@ module.exports = {
     });
     return res.json({ success: "ok" });
   },
+  async destroyItemVenda(req, res) {
+
+    const venda = await Venda.findByPk(req.params.id_venda);
+    if (!venda) {
+      return res.status(400).json({ error: 'Venda não encontrada!', id: req.params.id })
+    }
+    item_venda = await Venda_item.findOne({
+      where: { venda_id: req.params.id_venda, produto_id: req.params.id_item }
+    })
+    if (!item_venda) {
+      return res.status(400).json({ error: 'Item não encontrado!', id: req.params.id_item })
+    }
+    await Venda_item.destroy({
+      where: { venda_id: req.params.id_venda, produto_id: req.params.id_item }
+    })
+    return res.json({ success: "ok" });
+  }
 };
